@@ -52,7 +52,8 @@ CREATE TABLE session (
 CREATE TABLE item (
   itemID int(15) NOT NULL,
   username varchar(12) COLLATE utf8_bin NOT NULL,
-  name varchar(30) COLLATE utf8_bin NOT NULL
+  name varchar(30) COLLATE utf8_bin NOT NULL,
+  time datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 # Add primary key and foregin key to each table
