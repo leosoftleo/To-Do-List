@@ -33,7 +33,7 @@ Developed by Leo Tsang :smiley:
  pip list
  ```
  
- For the database, use the following SQL to create the table
+ For the database, use the following SQL statement to create the table
  ```SQL
  # The table containing username and password
  CREATE TABLE login (
@@ -59,6 +59,14 @@ CREATE TABLE item (
 ALTER TABLE login
   ADD PRIMARY KEY (username);
   
+ ALTER TABLE session
+  ADD PRIMARY KEY (sessionID),
+  ADD CONSTRAINT session_fk1 FOREIGN KEY (username) REFERENCES login (username);
   
+ ALTER TABLE item
+  ADD PRIMARY KEY (itemID, username),
+  ADD CONSTRAINT item_fk1 FOREIGN KEY (username) REFERENCES login (username);
+  
+ COMMIT;
  ```
  
