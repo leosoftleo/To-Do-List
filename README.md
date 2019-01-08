@@ -7,6 +7,7 @@ Developed by Leo Tsang :smiley:
   Techniques:<br />
   Client side: JQuery, Bootstrap <br />
   Server side: Python Flask
+  Database: MySQL
 
 ## Deployment
 
@@ -31,3 +32,33 @@ Developed by Leo Tsang :smiley:
  ```
  pip list
  ```
+ 
+ For the database, use the following SQL to create the table
+ ```SQL
+ # The table containing username and password
+ CREATE TABLE login (
+  username varchar(12) COLLATE utf8_bin NOT NULL,
+  password varchar(16) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+# The table containing login session id
+CREATE TABLE session (
+  sessionID varchar(60) COLLATE utf8_bin NOT NULL,
+  username varchar(12) COLLATE utf8_bin NOT NULL,
+  loginTime datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+# The table containing the item of the to do list
+CREATE TABLE item (
+  itemID int(15) NOT NULL,
+  username varchar(12) COLLATE utf8_bin NOT NULL,
+  name varchar(30) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+# Add primary key and foregin key to each table
+ALTER TABLE login
+  ADD PRIMARY KEY (username);
+  
+  
+ ```
+ 
