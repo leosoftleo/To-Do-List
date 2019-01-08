@@ -66,7 +66,9 @@ ALTER TABLE login
  ALTER TABLE item
   ADD PRIMARY KEY (itemID, username),
   ADD CONSTRAINT item_fk1 FOREIGN KEY (username) REFERENCES login (username);
-  
- COMMIT;
  ```
  
+ # Demonstration
+ 
+  index page
+  
