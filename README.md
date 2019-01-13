@@ -6,7 +6,7 @@ Developed by Leo Tsang :smiley:
   
   Techniques:<br />
   Client side: JQuery, Bootstrap <br />
-  Server side: Python Flask
+  Server side: Python Flask <br />
   Database: MySQL
 
 ## Deployment
