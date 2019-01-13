@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>To-Do-List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/list.css">
+
+    <script>
+        $(document).ready(function(){
+            var sessionID = localStorage.getItem("sessionID");
+            if (sessionID != null){
+
+                //Show username
+                $("#isLogin").show();
+                $.post("http://127.0.0.1:5000/getUsername", {sessionID : sessionID}, function(data, status) {
+                    $("#username").text(data);
+                });
+
+                //Show current items
+                $.post("http://127.0.0.1:5000/getList", {sessionID : sessionID}, function(data, status) {
+                    itemList = JSON.parse(data);
+                    for (i = 0; i < itemList.result.length; i++){
+                        code = "<tr><td>" + (i + 1) + "</td><td>" + itemList.result[i] + "</td>" + "<td><input type=\"checkbox\" id=\"" + itemList.itemID[i] + "\"</td></tr>";
+                        $("table tbody").append(code);
+                    }
+                });
+            }
+            else{
+                $("#isNotLogin").show();
+            }
+
+            //Add item
+            $("#addItem").click(function(){
+                var itemName = $("#itemName").val();
+                if (itemName == ""){
+                    alert("Please enter the name of item!")
+                    return
+                }
+                else{
+                    $.post("http://127.0.0.1:5000/insertItem", {sessionID : sessionID, name: itemName});
+                    $("#addItemModal").modal("toggle");
+                    location.reload();
+                }
+            });
+
+            //Delete item
+            var itemID;
+            $("#deteleItem").click(function(){
+                var check = confirm("Please press OK to confirm deleting selected items");
+                if (check){
+                    $("input[type=\"checkbox\"").each(function(index){
+                        itemID = $(this).attr("id");
+                        if ($(this).prop("checked"))
+                            $.post("http://127.0.0.1:5000/deleteItem", {sessionID : sessionID, itemID: itemID});
+                    });
+                    location.reload();
+                }
+            });
+            
+        });
+        
+    </script>
+</head>
+
+<body>
+    <div id="isNotLogin">
+        <h1>Please Login to Access This Page</h1>
+    </div>
+    <div id="isLogin">
+        <h3>Welcome <span id="username"></span></h3>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addItemModal">Add Item</button>
+        <button class="btn btn-danger" id="deteleItem">Delete Item</button>
+
+        <table class="table table-hover">
+            <thead>
+                <tr><th>Number</th><th>Name</th><th>Control</th></tr>
+            </thead>
+            
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div id="addItemModal" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4>Add New Item</h4>
+                </div>
+                <div class="modal-body">
+                    <label for="name">Name: </label>
+                    <input id="itemName" type="text" name="name">
+                </div>
+                <div class="modal-footer">
+                    <button id="addItem" class="btn btn-success">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

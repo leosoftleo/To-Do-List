@@ -1,0 +1,21 @@
+#welcomeMsg{
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#homePhoto{
+    display: block;
+    width: 80%;
+    height: 600px;
+    overflow: hidden;
+    margin: auto auto;
+}
+
+#homeText{
+    text-align: center;
+    font-size: 3em;
+    position: relative;
+    bottom: 100px;
+    font-weight: bold;
+}
+

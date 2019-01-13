@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>To-Do-List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/home.css">
+
+    <script>
+        //Show the username on the home page
+        $(document).ready(function(){
+            var sessionID = localStorage.getItem("sessionID");
+            if (sessionID != null){
+                //Get user name
+                $.post("http://127.0.0.1:5000/getUsername", {sessionID : sessionID}, function(data, status) {
+                    $("#username").text(data);
+                });
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+    <div id="welcomeMsg">
+        Welcome <span id="username">Guest</span> !
+    </div>
+    <img src="../image/homePageImg.jpg" alt="Home Photo" id="homePhoto">
+    <h1 id="homeText">This is a To Do List</h1>
+</body>
+
+</html>

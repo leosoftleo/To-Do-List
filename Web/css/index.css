@@ -1,0 +1,25 @@
+iframe{
+    margin: 20px auto;
+    width: 100%;
+    height: 1000px;
+    border: none;
+}
+
+#username, #username-register, #password-register, #re-password-register{
+    margin-bottom: 20px;
+}
+
+#wrongMsg{
+    margin-top: 20px;
+    color: red;
+    display: none; 
+}
+
+#wrongMsg-register{
+    color: red;
+}
+
+.modal{
+    margin-top: 200px;
+}
+

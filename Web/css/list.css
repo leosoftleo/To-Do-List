@@ -1,0 +1,20 @@
+input[type="checkbox"]{
+    position: relative;
+    left: 20px;
+}
+#isNotLogin{
+    display:none;
+}
+
+#isNotLogin h1{
+    color: red;
+    text-align: center;
+}
+
+#isLogin{
+    display:none;
+}
+
+.list-group-item span:nth-child(1){
+    width: 25%;
+}
