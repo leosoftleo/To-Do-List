@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>To-Do-List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="web/css/core.css">
+    <link rel="stylesheet" href="web/css/index.css">
+
+    <script>
+        $(document).ready(function () {
+
+            //Show navigation bar icon
+            var sessionID = localStorage.getItem("sessionID");
+            if (sessionID != null) {
+                $("#register_nav").hide();
+                $("#login_nav").hide();
+            }
+            else {
+                $("#logout_nav").hide();
+            }
+
+            //Login procedure
+            $("#login-btn").click(function () {
+                //Get input from user
+                var username = $("#username").val();
+                var password = $("#password").val();
+
+                //Input checking
+                if (username == "") {
+                    alert("Please enter your username!!")
+                    return
+                }
+
+                if (password == "") {
+                    alert("Please enter your password!!")
+                    return
+                }
+
+                //Call API to get session ID
+                $.post("http://127.0.0.1:5000/login", { username: username, password: password }, function (data, status) {
+                    //Get session ID
+                    session = JSON.parse(data).sessionID;
+                    if (session != 0) {
+                        localStorage.setItem("sessionID", session);
+                        $("#login").modal("toggle");
+                        $("#username").val("");
+                        $("#password").val("");
+                        location.reload();
+                    }
+                    else
+                        $("#wrongMsg").show();
+                });
+            });
+
+            //Logout procedure
+            $("#logout_nav").click(function () {
+                localStorage.clear();
+                location.reload();
+
+            });
+
+            //Register procedure
+            $("#register-btn").click(function () {
+                //Input checking
+                var username = $("#username-register").val();
+                var password = $("#password-register").val();
+
+                if (username == ""){
+                    $("#wrongMsg-register").text("Please enter username!")
+                    return;
+                }
+
+                if (password == ""){
+                    $("#wrongMsg-register").text("Please enter password!")
+                    return;
+                }
+
+                if ($("#re-password-register").val() == ""){
+                    $("#wrongMsg-register").text("Please fill in re-enter password!")
+                    return;
+                }
+
+                if ($("#password-register").val() != $("#re-password-register").val()){
+                    $("#wrongMsg-register").text("Re-enter password is not same with password, please enter again");
+                    return;
+                }
+
+                //Call API to do the register procedure
+                $.post("http://127.0.0.1:5000/register", { username: username, password: password }, function (data, status) {
+                    statusCode = JSON.parse(data).status
+                    //Get server side input checking result
+                    if (statusCode == 1){
+                        $("#wrongMsg-register").text("The username has been used!");
+                        return;
+                    }
+
+                    if (statusCode == 2){
+                        $("#wrongMsg-register").text("The password should be at least 6 characters!");
+                        return;
+                    }
+
+                    //Login after register successfully
+                    alert("Register successfully! Welcome to our family");
+
+                    //Get session ID
+                    $.post("http://127.0.0.1:5000/login", { username: username, password: password }, function (data, status) {
+                    session = JSON.parse(data).sessionID;
+                    localStorage.setItem("sessionID", session);
+                    location.reload();
+                });
+                    
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="web/html/home.html" target="content">To-Do-List</a>
+            </div>
+
+
+            <ul class="nav navbar-nav">
+                <li><a href="Web/html/home.html" target="content">Home</a></li>
+                <li><a href="Web/html/list.html" target="content">List</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li id="register_nav" data-toggle="modal" data-target="#register"><a><span class="glyphicon glyphicon-lock"></span> Register</a></li>
+                <li id="login_nav" data-toggle="modal" data-target="#login"><a><span class="glyphicon glyphicon-lock"></span>
+                        Log In</a></li>
+                <li id="logout_nav"><a><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+            </ul>
+        </div>
+
+        <div class="modal fade" id="login" role="dialog" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label for="username">Username: </label>
+                        <input type="text" name="username" id="username">
+                        <br>
+                        <label for="password">Password: </label>
+                        <input type="password" name="password" id="password">
+                        <p id="wrongMsg">Wrong username or password!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-block" id="login-btn">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="register" role="dialog" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Register</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label for="username-register">Username: </label>
+                        <input type="text" name="username" id="username-register">
+                        <br>
+                        <label for="password-register">Password: </label>
+                        <input type="password" name="password" id="password-register">
+                        <br>
+                        <label for="re-password-register">Re-enter Password: </label>
+                        <input type="password" name="password" id="re-password-register">
+                        <p id="wrongMsg-register"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success btn-block" id="register-btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <iframe src="web/html/home.html" name="content"></iframe>
+
+</body>
+
+</html>
