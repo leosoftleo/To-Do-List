@@ -71,7 +71,7 @@ ALTER TABLE login
  
  # Demonstration
  
- Before login
+ ### Before login
  
   Index page 
   
@@ -82,7 +82,7 @@ ALTER TABLE login
   Register
   
  
- After login
+ ### After login
  
   Home page
   
